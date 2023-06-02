@@ -140,7 +140,7 @@ check_toolchain()
     echo "M4:=${M4}" >>$CONFIG
     echo "EMACS:=${EMACS}" >>$CONFIG
     echo "ARCH_INCLUDES:=$ARCH_INCLUDES" >> $CONFIG
-    echo "OBJ_DIR := $OBJ_DIR" >> $CONFIG
+#    echo "OBJ_DIR := $OBJ_DIR" >> $CONFIG
 }
 
 check_zlib()

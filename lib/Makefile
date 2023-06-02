@@ -10,28 +10,28 @@ SUBDIRS=util testing
 all: $(SUBDIRS) libxdp
 
 util: libxdp
-	@echo; echo "  $@"; $(MAKE) -C $@
+	@echo; echo "  xxx-1 $@"; $(MAKE) -C $@ OBJDIR=$(OBJDIR)/$@
 
 testing: libxdp util
-	@echo; echo "  $@"; $(MAKE) -C $@
+	@echo; echo "  xxx-2 $@"; $(MAKE) -C $@ OBJDIR=$(OBJDIR)/$@
 
 .PHONY: libxdp
 libxdp: $(OBJECT_LIBBPF)
-	@echo; echo "  $@"; $(MAKE) -C $@
+	@echo; echo "  xxx-3 $@"; $(MAKE) -C $@ OBJDIR=$(OBJDIR)/$@
 
 .PHONY: clean
 clean: libbpf_clean
 	@for i in $(SUBDIRS) libxdp; \
-	do $(MAKE) -C $$i clean; done
+	do $(MAKE) -C $$i clean OBJDIR=$(OBJDIR)/$$i ; done
 
 .PHONY: install
 install: libxdp_install
-	$(MAKE) -C testing install
+	$(MAKE) -C testing install OBJDIR=$(OBJDIR)/testing
 
 .PHONY: libxdp_install
 libxdp_install: libxdp
 	install -m 0755 -d $(DESTDIR)$(HDRDIR)
-	$(MAKE) -C libxdp install
+	$(MAKE) -C libxdp install OBJDIR=$(OBJDIR)/libxdp
 
 libbpf: $(OBJECT_LIBBPF)
 
@@ -47,11 +47,11 @@ LIBBPF_SOURCES := $(wildcard libbpf/src/*.[ch])
 .PHONY: libbpf_clean
 libbpf/src/libbpf.a: $(LIBBPF_SOURCES)
 	@echo ; echo "  libbpf"
-	$(QUIET_CC)$(MAKE) -C libbpf/src CFLAGS="$(LIBBPF_CFLAGS)" $P
-	$(QUIET_INSTALL)$(MAKE) -C libbpf/src install_headers DESTDIR=root $P
+	$(QUIET_CC)$(MAKE) -C libbpf/src CFLAGS="$(LIBBPF_CFLAGS)" $P OBJDIR=$(OBJDIR)/libbpf
+	$(QUIET_INSTALL)$(MAKE) -C libbpf/src install_headers DESTDIR=root $P OBJDIR=$(OBJDIR)/libbpf
 
 libbpf_clean:
-	$(Q)$(MAKE) -C libbpf/src clean $P
+	$(Q)$(MAKE) -C libbpf/src clean $P OBJDIR=$(OBJDIR)/libbpf
 
 else
 

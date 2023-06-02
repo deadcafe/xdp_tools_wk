@@ -3,7 +3,6 @@
 # Top level Makefile for xdp-tools
 
 export XDP_TOOLS_TOP_DIR=$(CURDIR)
-
 OUTPUT_DIR=$(XDP_TOOLS_TOP_DIR)/output
 
 ifeq ("$(origin V)", "command line")
@@ -26,16 +25,16 @@ SUBDIRS := lib $(UTILS)
 all: $(SUBDIRS)
 
 lib: config.mk check_submodule
-	@echo; echo $@; $(MAKE) -C $@
+	@echo; echo $@; $(MAKE) -C $@ OBJDIR=$(OUTPUT_DIR)/$@
 
 libxdp: config.mk check_submodule
-	@echo; echo lib; $(MAKE) -C lib $@
+	@echo; echo lib; $(MAKE) -C lib $@ OBJDIR=$(OUTPUT_DIR)/lib
 
 libxdp_install: libxdp
-	@$(MAKE) -C lib $@
+	@$(MAKE) -C lib $@ OBJDIR=$(OUTPUT_DIR)/lib
 
 $(UTILS): lib
-	@echo; echo $@; $(MAKE) -C $@
+	@echo; echo $@; $(MAKE) -C $@ OBJDIR=$(OUTPUT_DIR)/$@
 
 help:
 	@echo "Make Targets:"
@@ -69,15 +68,15 @@ distclean: clobber
 
 clean: check_submodule
 	@for i in $(SUBDIRS); \
-	do $(MAKE) -C $$i clean; done
+	do $(MAKE) -C $$i clean OBJDIR=$(OUTPUT_DIR)/$$i ; done
 
 install: all
 	@for i in $(SUBDIRS); \
-	do $(MAKE) -C $$i install; done
+	do $(MAKE) -C $$i install OBJDIR=$(OUTPUT_DIR)/$$i ; done
 
 test: all
 	@for i in lib/libxdp $(UTILS); do \
-		echo; echo test $$i; $(MAKE) -C $$i test; \
+		echo; echo test $$i; $(MAKE) -C $$i test OBJDIR=$(OUTPUT_DIR)/$$i ; \
 		if [ $$? -ne 0 ]; then failed="y"; fi; \
 	done; \
 	if [ ! -z $$failed ]; then exit 1; fi
