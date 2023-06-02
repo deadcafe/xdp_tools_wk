@@ -63,3 +63,9 @@ xdp-dispatcher.c
 .clangd
 .cache
 compile_commands.json
+
+*.3
+*.8
+lib/libbpf/src/root/
+*~
+.*~
