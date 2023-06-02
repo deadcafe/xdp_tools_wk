@@ -9,7 +9,7 @@ OBJ_DIR="."
 # Parse arguments
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --obj-dir=*)
+    --obj_dir=*)
       OBJ_DIR="${1#*=}"
       ;;
     *)
