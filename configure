@@ -3,6 +3,23 @@
 # This is not an autoconf generated configure
 #
 
+# Default output directory
+OBJ_DIR="."
+
+# Parse arguments
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --obj-dir=*)
+      OBJ_DIR="${1#*=}"
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
 # Output file which is input to Makefile
 CONFIG_FINAL=config.mk
 CONFIG=".${CONFIG}.tmp"
@@ -123,6 +140,7 @@ check_toolchain()
     echo "M4:=${M4}" >>$CONFIG
     echo "EMACS:=${EMACS}" >>$CONFIG
     echo "ARCH_INCLUDES:=$ARCH_INCLUDES" >> $CONFIG
+    echo "OBJ_DIR := $OBJ_DIR" >> $CONFIG
 }
 
 check_zlib()

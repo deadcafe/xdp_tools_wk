@@ -2,6 +2,10 @@
 # SPDX-License-Identifier: GPL-2.0
 # Top level Makefile for xdp-tools
 
+export XDP_TOOLS_TOP_DIR=$(CURDIR)
+
+OUTPUT_DIR=$(XDP_TOOLS_TOP_DIR)/output
+
 ifeq ("$(origin V)", "command line")
 VERBOSE = $(V)
 endif
@@ -46,7 +50,7 @@ help:
 	@echo " V=[0|1]             - set build verbosity level"
 
 config.mk: configure
-	sh configure
+	sh configure --obj_dir=$(OUTPUT_DIR)
 
 check_submodule:
 	@if [ -d .git ] && `git submodule status lib/libbpf | grep -q '^+'`; then \
